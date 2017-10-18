@@ -68,7 +68,7 @@ void Task::updateHook()
 
     motionCommand.translation = 0;
     motionCommand.rotation    = 0;
-    motionCommand.heading     = 0;
+    motionCommand.heading     = base::Angle::fromRad(0);
 
     if( _robot_pose.readNewest( rbpose ) == RTT::NoData)
     {
@@ -79,7 +79,7 @@ void Task::updateHook()
         }
 
         trajectoryFollower.removeTrajectory();
-        _motion_command.write(motionCommand.toBaseMotion2D());
+        _motion_command.write(motionCommand);
 
         return;
     }
@@ -138,7 +138,7 @@ void Task::updateHook()
     
     _follower_data.write(trajectoryFollower.getData());
     _current_trajectory.write(trajectoryFollower.getData().currentTrajectory);
-    _motion_command.write(motionCommand.toBaseMotion2D());
+    _motion_command.write(motionCommand);
 
     // update task state
     if(current_state != new_state)
@@ -158,8 +158,8 @@ void Task::stopHook()
 {
     motionCommand.translation = 0;
     motionCommand.rotation    = 0;
-    motionCommand.heading     = 0;
-    _motion_command.write(motionCommand.toBaseMotion2D());
+    motionCommand.heading     = base::Angle::fromRad(0);
+    _motion_command.write(motionCommand);
 
     TaskBase::stopHook();
 }
